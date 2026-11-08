@@ -133,6 +133,9 @@
 
   .why{margin:10px 0 0}
   .why h3{margin:26px 0 6px;font-size:16.5px}
+  .whynow{margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.25)}
+  .whynow h3{margin:0 0 8px;font-size:16px;color:#d4ecdd}
+  .whynow p{margin:0;font-size:14.5px;color:#eef6f0;line-height:1.6}
   .why-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   @media(max-width:520px){.why-cards{grid-template-columns:1fr}}
   .why-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 15px}
@@ -148,6 +151,11 @@
   .rec-col p{margin:0 0 10px;font-size:12.5px;color:var(--ink-soft)}
   .rec-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   @media(max-width:520px){.rec-grid{grid-template-columns:1fr}}
+  .hobby-box{margin-top:16px;border:2px dashed var(--accent);border-radius:14px;padding:16px 18px;background:var(--accent-soft)}
+  .hobby-box h4{margin:0 0 4px;font-size:17px;color:var(--accent-dark)}
+  .hobby-box p{margin:0 0 8px;font-size:13px;color:var(--ink-soft)}
+  .hobby-name{font-size:18px;font-weight:700;color:var(--accent-dark);margin:2px 0 4px}
+  .hobby-desc{font-size:14.5px;color:var(--ink);margin:0}
   .store{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:14px 0 4px;padding-bottom:16px;border-bottom:1px dashed var(--line)}
   .store a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:inherit}
   .store .qrc{width:11px}
@@ -172,7 +180,7 @@
         <button id="langEn" type="button" data-lang="en" class="active">EN</button>
         <button id="langRu" type="button" data-lang="ru">RU</button>
       </div>
-      <span class="hint" id="stepHint">Шаг 1 · 6 вопросов</span>
+      <span class="hint" id="stepHint">Шаг 1 · 9 вопросов</span>
     </div>
   </header>
 
@@ -183,11 +191,15 @@
       <div class="card hero-card">
         <span class="logo" aria-hidden="true">⏳</span>
         <h1 class="hero-title" id="wTitle">Куда уходит твой свободный день?</h1>
-        <p class="lede" id="wLede">6 коротких вопросов о том, как ты проводишь свободное время. В конце — честная оценка и персональные идеи, чем заняться с пользой.</p>
+        <p class="lede" id="wLede">9 коротких вопросов о том, как ты проводишь свободное время. В конце — честная оценка и персональные идеи, чем заняться с пользой.</p>
         <div class="arrows">
-          <span class="arrow">📊 <span id="wA1">6 вопросов</span></span>
+          <span class="arrow">📊 <span id="wA1">9 вопросов</span></span>
           <span class="arrow">💡 <span id="wA2">30+ идей</span></span>
           <span class="arrow">🕐 <span id="wA3">2 минуты</span></span>
+        </div>
+        <div class="whynow" id="whyNowWrap">
+          <h3 id="whyNowTitle" data-i="whyNowTitle">Почему время с пользой — это важно</h3>
+          <p id="whyNowText" data-i="whyNowText">Время — единственный ресурс, который нельзя вернуть. Тратя час впустую сегодня, ты отнимаешь его у будущего себя. Полезные занятия — учёба, движение, творчество, живое общение — делают тебя сильнее, здоровее и интереснее уже сейчас.</p>
         </div>
         <div class="audience">
           <h3 id="wFor">Кому подходит</h3>
@@ -200,7 +212,7 @@
           <a id="linkWrap" href="#" target="_blank" rel="noopener">
             <span>⏳</span><span id="linkText" data-i="linkText">Пройти опрос онлайн</span>
           </a>
-          <img class="qrc" id="qrImg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAFyAQAAAADAX2ykAAACuUlEQVR4nO1aUYqkMBB9VQr9qbAHmKPYN9gjzZn2BuYofYAB/WxQakklOt0uRIWdxrT1PsRYDynyqEqlEhLsgeNddMD4afCKfQnjp8Er9iWMnwav2Jcwfhq8Yl/C+GeYH4ooAUcl6NoTPTwU1xf6sx28g3tifiMeHUDXagDchwhQ+QcKNcmx/d8MPim/jxEqbU+EphsJgD40ustX+7MVvJl5Tn65/NDIWAr62mdqQNC/1h82/o/OD137i2iSllaH//n/a+BVxjOMvy1+K7/A9oC4ughfqNE113974Nt8psHH5DstkWuAPjs/7i8C9L6SxhjK59f6sxm8nXri+JV5LK4GaRCHt+foPZ7/bPw0RDc/TVeERxzKoDlbdOOkw2BpbT7T4IPxEXQT1Te8RmmjoH7/205Km7659q8+7qSLMBzFpTcMUd2JPm+2/maqLx7CNIQupkzdzpTWb5csP+esbzUATeeHQdoitiZbNXjhLT9n3r8SYCjhft99Vv7ypfMEV3dCx/Sfjb+jfsYcv/qGCG+w+M2+fkboSsb8HNdkr3mQ2+rnnPkjobldJPavKk3Sgz8pjOuvnf/mX1/J1Nr4bmiIDufdsfU3stQXQVXNxeFUX7NyEVtXs/qmb576SlB1OhWMtza6WWQtvEzfbPVFSM1BxilgvxEblxa/ufJFK2QfxNNdnBi1UOF99WX1Vc7xi+esPG+CoaWVVtK2/r7D/ckA548bgFnaWzktzAf1fzP4rP0rTNugKX6jvgqL33fhiy+YwyXoRiut0MmKS/Tx/V8Dn/x+LDV/RhL0vwZxVAzUdLW/Dg2hpj2i/2z83fcnBwL0EuVIvj9ZwtVfZUzVNp9p8MHrZ+C5albY+dH73J9EwKBvsvx8OP/Z+Elw2vwPjJ8Gr9iXMH4avGJfwvhp8Ip9CeOn8dPz8xeVYfWU86yJXAAAAABJRU5ErkJggg==" alt="QR-code link">
+          <img class="qrc" id="qrImg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAFyAQAAAADAX2ykAAAC9UlEQVR4nO1aS46kMAy1TaReBmkOUEeBm7XmZsVR6gAjwbIlkEd2AlTTUkgtigbFbxER/BYWxvEvyPAKOnqJDmD8NGhHvoXx06Ad+RbGT4N25FsYPw3akW9h/BK+D0Y4ABh0QYQOEfUpoD1Qn3zQC9yC+Q0LerH07QsRa3npR1krFfG59c8GFcofoocyPxwEgzaPj2DV6NiH6pMLymYGGN+P8XwGmOZTeYV9nzTo5HzEumJs1ch+BL7/sj57oF3Gd5TK98xqSw3CAR06iGc2j0frkwvKZhbN7zRFrgGwDfnzB+NnX0n8nUL6fKw+2aB8apF84A3u6sk+Jsy8lZ5NfzJ+Tv3bDi66bqPns+ZXfgznM7Ywmf9e83+D1TdDEJZYu25B6191Zy2RzX+vyp8QmoeTSPzBGon5PkglLD2Pz4fF32v77z247uq1Yl8/e+3i0+a/F+ZjiL/av+qlCB6WTrQm1kfrkwXKo0Hp/MEB/719SValyyg96RGgq7VI0uVIfXJB2cwy+U5XBC9pszosVBy2XS3vfC/SyZ1UfzJ+Gvw0HAqlb3TdNf6GTqXF3wv/b00vY0BJk5epUcippUmpjUuLv5e0r9OVu7qSY3h0ssi2Z2x6YIDhT2xXHqMPGf8N9RGo/96fJv3izv36Ts9sq4+u939CjKuaIWuYDVOFBT7GZIu/F7YvhPjbx1lgNLKfE6/Y5DD/vSqfNWsWg+p8P4iaXnqWmj/Pt3fOqn8+qPD7k6y5Mt60tQGxJu5ke6Q++aAXuAXzm/n+JDRaJInrwiCV0nyJ8lh9skH51KL5QzyB1XWfbl11uJj7UH1yQdnMgNL5LPdjQxBu1klwaFz+hj57oF1G2Xy32WuTQ5+4q/85BpgcdDcG629c2r5eAuwgVm21Pzk5Fq9FHTc0d9keog8Z/x31b0SsemNNzEtqFWYOVv9e7/90uq4dq29PVbzJ8fT+bPqT8ZOgtPgHjJ8G7ci3MH4atCPfwvhp0I58C+On8e7v8x9d/r8XWE1zPAAAAABJRU5ErkJggg==" alt="QR-code link">
         </div>
         <h3 id="whyTitle" data-i="whyTitle" style="display:none"></h3>
         <div class="actions">
@@ -247,11 +259,14 @@
     en: {
       brandSub:"Make the most of your free time",
       step:"Step", of:"of",
+      extraStep:"Quick step ", extraOf:" / ",
       chooseMany:"choose more than one",
       wTitle:"Where does your free time go?",
-      wLede:"Six short questions about how you spend your free time. You get an honest result and personal ideas for spending it well.",
-      wA1:"6 questions", wA2:"30+ ideas", wA3:"2 minutes",
+      wLede:"Nine short questions about how you spend your free time. You get an honest result and personal ideas for spending it well.",
+      wA1:"9 questions", wA2:"30+ ideas", wA3:"2 minutes",
       wFor:"For everyone",
+      whyNowTitle:"Why spending time well matters",
+      whyNowText:"Time is the only resource you can't get back. Wasting an hour today takes it from your future self. Useful activities — learning, movement, creativity, real communication — make you stronger, healthier and more interesting right now.",
       forStudents:"For students", forStudentsT:"Free time after lessons and homework",
       forAdults:"For adults", forAdultsT:"Evenings and weekends after work and chores",
       linkText:"Take the quiz online",
@@ -275,8 +290,20 @@
       panelTip:"How to start when you feel like doing nothing",
       restartTip:"Tip",
       secStats:"You should know this",
+      counterTitle:"Tests completed on this device", counterSub:"Anonymous result, stored locally on this device only",
+      statTitle:"Anonymous statistics of those who took the test",
+      statAttempts:"Total completions", statAvgScore:"Average usefulness score", statWasted:"Share who waste time", statMixed:"Share with a mixed result", statTop:"Share with good result",
       recSport:"🏃 Sport & movement", recSportSub:"Move a little every day — it gives you energy back",
       recDev:"📚 Self-development", recDevSub:"Learn and grow even 15–20 minutes at a time",
+      hobbyTitle:"🎨 A hobby that fits you", hobbySub:"Picked from your answers — try it tonight",
+      extraTitle:"🔎 A few clarifying questions", extraSub:"Your first score was low — answer 3 extra questions and get precise ideas.",
+      extraTargetTitle:"🎯 Your precise plan",
+      exTrigger:"When boredom or stress makes you open the phone — replace it with one small useful task.",
+      exHabit:"Scrolling has become a habit — swap it for a timed activity to break the loop.",
+      exNoIdea:"You don't know what to do — start with the simplest useful thing for 5 minutes.",
+      exLazy:"You put things off — use the «2-minute rule»: start tiny and keep going.",
+      exRest:"You want to rest — real rest means a walk, fresh air and no screens.",
+      exGrow:"You want to grow — pick one small learning goal this week and do it 15 minutes daily.",
       ringPct:"",
       QUIZ:[
         {t:"Do you choose how you spend your free time?", s:"Think about whether your free time follows a plan or just happens.",
@@ -314,12 +341,56 @@
             {v:2,t:"Yes, but I rarely do it",d:"I wait for special energy"},
             {v:3,t:"Yes, I have a favourite thing",d:"I do it regularly"}
           ]},
+        {t:"How often do you move and exercise?", s:"Sport and walking count too.",
+          opts:[
+            {v:0,t:"Almost never",d:"I sit most of the day"},
+            {v:1,t:"A little",d:"Only on good days"},
+            {v:2,t:"A few times a week",d:"I move regularly"},
+            {v:3,t:"Almost daily",d:"Sport is part of my routine"}
+          ]},
+        {t:"How do you spend time with people?", s:"Real communication matters.",
+          opts:[
+            {v:0,t:"Mostly online",d:"Messages, not meetings"},
+            {v:1,t:"Rarely",d:"Seldom meet friends or family"},
+            {v:2,t:"Sometimes",d:"Regular but not planned"},
+            {v:3,t:"Often",d:"I meet people on purpose"}
+          ]},
+        {t:"Do you have small goals to grow?", s:"Learning and self-development.",
+          opts:[
+            {v:0,t:"No goals",d:"I live day by day"},
+            {v:1,t:"A few",d:"But I don't follow them"},
+            {v:2,t:"Yes",d:"I sometimes work on them"},
+            {v:3,t:"Clear ones",d:"I plan and move forward"}
+          ]},
         {t:"When are you truly happy with your day?", s:"Which evening feels like a good one?",
           opts:[
             {v:0,t:"Lost hours in my phone",d:"Time just disappeared"},
             {v:1,t:"Watched a lot, but felt empty",d:"Not much satisfaction"},
             {v:2,t:"Did something and rested",d:"Some balance"},
             {v:3,t:"Learned, did, walked, created",d:"I feel the day was well spent"}
+          ]}
+      ],
+      EXTRA:[
+        {t:"What makes you open the phone non-stop?", s:"The trigger behind the scrolling.",
+          opts:[
+            {v:0,t:"Boredom",d:"Nothing else to do"},
+            {v:0,t:"Stress or tiredness",d:"I hide from problems"},
+            {v:1,t:"Useful content",d:"I follow something interesting"},
+            {v:1,t:"Habit",d:"I don't even think about it"}
+          ]},
+        {t:"What keeps you from starting things?", s:"The main barrier.",
+          opts:[
+            {v:0,t:"I don't know what to do",d:"No clear idea"},
+            {v:0,t:"Fear of doing it badly",d:"I want it to be perfect"},
+            {v:1,t:"Laziness",d:"I put it off"},
+            {v:1,t:"No time",d:"Too much to do"}
+          ]},
+        {t:"What result do you want most?", s:"Pick the most attractive one.",
+          opts:[
+            {v:0,t:"Feel rested",d:"More energy and calm"},
+            {v:1,t:"Learn or grow",d:"New skill or knowledge"},
+            {v:1,t:"Be healthier",d:"More movement"},
+            {v:1,t:"Connect with people",d:"Deeper relationships"}
           ]}
       ],
       RESULTS:{
@@ -339,11 +410,14 @@
     ru: {
       brandSub:"Как провести свободное время с пользой",
       step:"Шаг", of:" · вопросов",
+      extraStep:"Шаг ", extraOf:" / ",
       chooseMany:"можно выбрать несколько",
       wTitle:"Куда уходит твой свободный день?",
-      wLede:"6 коротких вопросов о том, как ты проводишь свободное время. В конце — честная оценка и персональные идеи, чем заняться с пользой.",
-      wA1:"6 вопросов", wA2:"30+ идей", wA3:"2 минуты",
+      wLede:"9 коротких вопросов о том, как ты проводишь свободное время. В конце — честная оценка и персональные идеи, чем заняться с пользой.",
+      wA1:"9 вопросов", wA2:"30+ идей", wA3:"2 минуты",
       wFor:"Кому подходит",
+      whyNowTitle:"Почему время с пользой — это важно",
+      whyNowText:"Время — единственный ресурс, который нельзя вернуть. Тратя час впустую сегодня, ты отнимаешь его у будущего себя. Полезные занятия — учёба, движение, творчество, живое общение — делают тебя сильнее, здоровее и интереснее уже сейчас.",
       forStudents:"Ученикам", forStudentsT:"Свободное время после уроков и домашки",
       forAdults:"Взрослым", forAdultsT:"Вечера и выходные после работы и дел",
       linkText:"Пройти опрос онлайн",
@@ -367,8 +441,20 @@
       panelTip:"Как начать, если ничего не хочется",
       restartTip:"Подсказка",
       secStats:"Это стоит знать",
+      counterTitle:"Прохождений теста на этом устройстве", counterSub:"Анонимно, хранится локально только на этом устройстве",
+      statTitle:"Анонимная статистика прошедших тест",
+      statAttempts:"Всего прохождений", statAvgScore:"Средний балл пользы", statWasted:"Доля тех, кто теряет время", statMixed:"Доля со смешанным результатом", statTop:"Доля с хорошим результатом",
       recSport:"🏃 Спорт и движение", recSportSub:"Двигайся немного каждый день — это возвращает энергию",
       recDev:"📚 Саморазвитие", recDevSub:"Учись и развивайся хоть по 15–20 минут",
+      hobbyTitle:"🎨 Хобби, которое тебе подходит", hobbySub:"Подобрано по твоим ответам — попробуй уже сегодня вечером",
+      extraTitle:"🔎 Пара уточняющих вопросов", extraSub:"Твой балл оказался низким — ответь на 3 вопроса и получи точечные идеи.",
+      extraTargetTitle:"🎯 Твой точный план",
+      exTrigger:"Когда скука или стресс заставляют открыть телефон — замени это на одно маленькое полезное дело.",
+      exHabit:"Скролл стал привычкой — замени его на занятие с таймером, чтобы разорвать круг.",
+      exNoIdea:"Не знаешь, чем заняться — начни с самого простого полезного дела на 5 минут.",
+      exLazy:"Откладываешь дела — используй «правило 2 минут»: начни с малого и продолжай.",
+      exRest:"Хочешь отдохнуть — настоящий отдых это прогулка, свежий воздух и без телефона.",
+      exGrow:"Хочешь расти — выбери одну маленькую учебную цель на неделю и делай её 15 минут в день.",
       ringPct:"",
       QUIZ:[
         {t:"Самостоятельно ли ты выбираешь, как проводить свободное время?", s:"Подумай: твоё свободное время идёт по плану или просто «случается».",
@@ -406,12 +492,56 @@
             {v:2,t:"Есть, но редко занимаюсь",d:"Жду особого настроения"},
             {v:3,t:"Да, есть любимое дело",d:"Занимаюсь регулярно"}
           ]},
+        {t:"Как часто ты двигаешься и занимаешься спортом?", s:"Спорт и прогулки тоже считаются.",
+          opts:[
+            {v:0,t:"Почти никогда",d:"Сижу большую часть дня"},
+            {v:1,t:"Немного",d:"Только в хорошие дни"},
+            {v:2,t:"Несколько раз в неделю",d:"Двигаюсь регулярно"},
+            {v:3,t:"Почти каждый день",d:"Спорт — часть моей рутины"}
+          ]},
+        {t:"Как ты проводишь время с людьми?", s:"Живое общение очень важно.",
+          opts:[
+            {v:0,t:"В основном онлайн",d:"Переписка, а не встречи"},
+            {v:1,t:"Редко",d:"Редко вижусь с близкими"},
+            {v:2,t:"Иногда",d:"Регулярно, но без плана"},
+            {v:3,t:"Часто",d:"Встречаюсь с людьми осознанно"}
+          ]},
+        {t:"Есть ли у тебя небольшие цели для развития?", s:"Учёба и саморазвитие.",
+          opts:[
+            {v:0,t:"Нет целей",d:"Живу одним днём"},
+            {v:1,t:"Немного",d:"Но не следую им"},
+            {v:2,t:"Есть",d:"Иногда над ними работаю"},
+            {v:3,t:"Чёткие",d:"Планирую и двигаюсь вперёд"}
+          ]},
         {t:"Когда ты честно доволен своим днём?", s:"Какой вечер для тебя — «удачный»?",
           opts:[
             {v:0,t:"Завис в телефоне без счёта времени",d:"Время будто испарилось"},
             {v:1,t:"Всё посмотрел, но пусто внутри",d:"Довольства мало"},
             {v:2,t:"Что-то успел + отдохнул",d:"Баланс есть, но рваный"},
             {v:3,t:"Учился, делал, гулял, что-то создал",d:"Чувствую, что день прожит не зря"}
+          ]}
+      ],
+      EXTRA:[
+        {t:"Что заставляет тебя без остановки открывать телефон?", s:"Триггер, из-за которого ты скроллишь.",
+          opts:[
+            {v:0,t:"Скука",d:"Больше нечем заняться"},
+            {v:0,t:"Стресс или усталость",d:"Прячусь от проблем"},
+            {v:1,t:"Полезный контент",d:"Слежу за чем-то интересным"},
+            {v:1,t:"Привычка",d:"Даже не задумываюсь"}
+          ]},
+        {t:"Что мешает тебе начать дела?", s:"Главный барьер.",
+          opts:[
+            {v:0,t:"Не знаю, чем заняться",d:"Нет чёткой идеи"},
+            {v:0,t:"Боязнь сделать плохо",d:"Хочу, чтобы было идеально"},
+            {v:1,t:"Лень",d:"Откладываю на потом"},
+            {v:1,t:"Нет времени",d:"Слишком много дел"}
+          ]},
+        {t:"Какого результата ты хочешь больше всего?", s:"Выбери самый привлекательный.",
+          opts:[
+            {v:0,t:"Чувствовать себя отдохнувшим",d:"Больше энергии и спокойствия"},
+            {v:1,t:"Учиться или расти",d:"Новый навык или знания"},
+            {v:1,t:"Быть здоровее",d:"Больше движения"},
+            {v:1,t:"Общаться с людьми",d:"Более глубокие отношения"}
           ]}
       ],
       RESULTS:{
@@ -431,14 +561,24 @@
 
   /* ---------------- state ---------------- */
   var lang = "ru";
-  var answers = new Array(6).fill(null);
+  var answers = [];
+  var ALL_COUNT = 9;
+  var EXTRA_COUNT = 3;
+  var extraAnswers = [];
+  var inExtra = false;
+  var extraCurrent = 0;
+  function resetAnswers(){ answers = new Array(ALL_COUNT).fill(null); extraAnswers = new Array(EXTRA_COUNT).fill(null); inExtra=false; extraCurrent=0; }
+  resetAnswers();
   var current = 0;
-  var SHARE_LINK = "http://192.168.1.80:8090/";
+  var SHARE_LINK = "https://sulta-time.github.io/Alexander/";
   var $ = function(id){ return document.getElementById(id) };
   var screens={welcome:$("s-welcome"),quiz:$("s-quiz"),result:$("s-result")};
   function t(){ return STR[lang] }
   function S(){ return t().QUIZ }
-  function stepLabel(){ var l=t(); return (l.step+" "+(current+1)+" "+l.of+" 6") }
+  function stepLabel(){
+    if(inExtra){ return (t().extraStep + (extraCurrent+1) + t().extraOf + EXTRA_COUNT); }
+    return (t().step+" "+(current+1)+" "+t().of+" "+ALL_COUNT);
+  }
 
   function show(name){
     for(var k in screens){ screens[k].classList.toggle("active", k===name) }
@@ -479,20 +619,32 @@
   }
 
   /* ---------------- quiz render ---------------- */
+  function curQuestion(){
+    if(inExtra) return t().EXTRA[extraCurrent];
+    return t().QUIZ[current];
+  }
+  function curAnswer(){
+    if(inExtra) return extraAnswers[extraCurrent];
+    return answers[current];
+  }
+  function setCurAnswer(idx){
+    if(inExtra){ extraAnswers[extraCurrent]=idx; }
+    else { answers[current]=idx; }
+  }
   function renderQuestion(){
-    var l=t(); var q=l.QUIZ[current];
+    var l=t(); var q=curQuestion();
     var multi = !!q.multi;
     $("qTitle").textContent = q.t;
     $("qSub").textContent = q.s + (multi ? "  (" + l.chooseMany + ")" : "");
     $("stepHint").textContent = stepLabel();
-    $("progressBar").style.width = ((current)/l.QUIZ.length*100)+"%";
-    if(multi && !Array.isArray(answers[current])) answers[current]=[];
+    $("progressBar").style.width = ((inExtra?extraCurrent:(current))/l.QUIZ.length*100)+"%";
+    if(multi && !Array.isArray(curAnswer())) setCurAnswer([]);
     var box=$("qOpts"); box.innerHTML="";
     box.setAttribute("role", multi?"group":"radiogroup");
     q.opts.forEach(function(o,idx){
       var isSel = multi
-        ? (answers[current].indexOf(idx)>-1)
-        : (answers[current]===idx);
+        ? (curAnswer().indexOf(idx)>-1)
+        : (curAnswer()===idx);
       var label=document.createElement("label");
       label.className="opt"+(isSel?" selected":"");
       label.setAttribute("role", multi?"checkbox":"radio");
@@ -504,14 +656,14 @@
       label.querySelector(".dd").textContent=o.d;
       function select(){
         if(multi){
-          var arr=answers[current];
+          var arr=curAnswer();
           var pos=arr.indexOf(idx);
           if(pos>-1) arr.splice(pos,1); else arr.push(idx);
           label.classList.toggle("selected", pos>-1);
           label.setAttribute("aria-checked", pos>-1?"false":"true");
           var inp=label.querySelector("input"); if(inp){ inp.checked=pos===-1; inp.focus(); }
         } else {
-          answers[current]=idx;
+          setCurAnswer(idx);
           box.querySelectorAll(".opt").forEach(function(el,i){ el.classList.toggle("selected",i===idx); el.setAttribute("aria-checked",i===idx?"true":"false"); });
           var r=box.querySelector('input[value="'+idx+'"]'); if(r){r.checked=true; r.focus();}
         }
@@ -521,11 +673,11 @@
       label.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){e.preventDefault();select();} });
       box.appendChild(label);
     });
-    $("backBtn").style.visibility = current===0?"hidden":"visible";
+    $("backBtn").style.visibility = (inExtra?extraCurrent===0:(current===0))?"hidden":"visible";
     $("nextBtn").disabled = vaild();
   }
   function vaild(){
-    var a=answers[current], q=S()[current];
+    var a=curAnswer();
     if(Array.isArray(a)) return a.length===0;
     return a===null;
   }
@@ -554,8 +706,8 @@
     return map[v];
   }
   function compute(){
-    var total=0,max=6*3;
-    for(var i=0;i<6;i++) total+=valOf(i);
+    var total=0,max=ALL_COUNT*3;
+    for(var i=0;i<ALL_COUNT;i++) total+=valOf(i);
     var pct=Math.round(total/max*100);
     var score = pct>=70?"great":(pct>=45?"ok":(pct>=25?"mix":"poor"));
     return {pct:pct,score:score};
@@ -566,73 +718,153 @@
     learn:{en:[
       ["Learn English for 20 minutes a day","Duolingo, Lingualeo or a series with English subtitles."],
       ["Build a useful skill","Python, Excel, Figma, photo editing — 15–30 minutes daily."],
-      ["Read something interesting","A book or a good article instead of the feed — 20 min a day."]
+      ["Read something interesting","A book or a good article instead of the feed — 20 min a day."],
+      ["Do a free online course","Coursera, Stepik or Khan Academy — one lesson a week."],
+      ["Write a short plan for the week","Know what you want to finish — and do the first step."],
+      ["Start a learning journal","Write down what you learned today in two sentences."]
     ],ru:[
       ["Учи английский 20 минут в день","Duolingo, Lingualeo или сериал на английском с субтитрами."],
       ["Освой полезный навык","Python, Excel, Figma, фотошоп — по 15–30 минут ежедневно."],
-      ["Прочитай что-нибудь интересное","Книга или статья вместо ленты — 20 минут в день."]
+      ["Прочитай что-нибудь интересное","Книга или статья вместо ленты — 20 минут в день."],
+      ["Пройди бесплатный онлайн-курс","Coursera, Stepik или «Яндекс Практикум» — один урок в неделю."],
+      ["Составь план на неделю","Реши, что хочешь успеть, — и начни с первого шага."],
+      ["Заведи дневник обучения","Записывай в двух предложениях, что узнал(а) сегодня."]
     ]},
     active:{en:[
       ["Walk 5,000–8,000 steps","Walk to a further bus stop, or take a walk after dinner."],
       ["A 30-minute workout, no equipment needed","Push-ups, squats, plank — at home or outside."],
-      ["Try a new activity","Bike ride, badminton, pool, table tennis."]
+      ["Try a new activity","Bike ride, badminton, pool, table tennis."],
+      ["Morning stretch routine","5 minutes of stretching after waking up."],
+      ["Evening jog or brisk walk","20–30 minutes, two or three times a week."],
+      ["Home workout with an app","Follow a short video — no gym needed."],
+      ["Active weekend outing","Go to a park, a hill or a lake with friends."]
     ],ru:[
       ["Пройди 5000–8000 шагов","Пешком до дальней остановки или прогулка после ужина."],
       ["30-минутная тренировка без инвентаря","Отжимания, приседания, планка — дома или во дворе."],
-      ["Попробуй новую активность","Велопрогулка, бадминтон, бассейн, настольный теннис."]
+      ["Попробуй новую активность","Велопрогулка, бадминтон, бассейн, настольный теннис."],
+      ["Утренняя зарядка-растяжка","5 минут потягиваний сразу после пробуждения."],
+      ["Вечерний бег или быстрая прогулка","20–30 минут, два-три раза в неделю."],
+      ["Тренировка по приложению","Короткое видео по длительности — спортзал не нужен."],
+      ["Активные выходные","Сходи с друзьями в парк, в горы или к озеру."]
     ]},
     create:{en:[
       ["Keep a 3-5 minute journal","Write down a thought, a thank-you, or a plan for tomorrow."],
       ["Make something with your hands","A drawing, a craft, music, cooking a new dish."],
-      ["Collect ideas in a notebook","Save thoughts — later they become projects."]
+      ["Collect ideas in a notebook","Save thoughts — later they become projects."],
+      ["Try photography","A photo walk — find beauty in your street."],
+      ["Learn a song on an instrument","20 minutes on a guitar, piano or app."],
+      ["Plan a small project","A craft fair, a gift, a mini-video — and finish it."]
     ],ru:[
       ["Веди дневник 3–5 минут","Записывай мысль дня, благодарность или план на завтра."],
       ["Создай что-то руками","Рисунок, поделка, музыка, приготовление нового блюда."],
-      ["Собирай идеи в заметки","Сохраняй мысли — потом они станут проектами."]
+      ["Собирай идеи в заметки","Сохраняй мысли — потом они станут проектами."],
+      ["Попробуй фотографию","Фото-прогулка — найди красоту на своей улице."],
+      ["Разбери песню на инструменте","20 минут на гитаре, пианино или в приложении."],
+      ["Запланируй маленький проект","Поделка, подарок, мини-видео — и доведи до конца."]
     ]},
     reset:{en:[
       ["Have a phone-free hour","Phone in another room for an hour — see what becomes possible."],
       ["Turn off notifications for half a day","Use «Do Not Disturb» — you don't need special apps."],
       ["Hide or delete 2–3 time-eating apps","Scrolling will get much harder."],
-      ["Try 10 days without short videos","Swap the feed for any task from this list."]
+      ["Try 10 days without short videos","Swap the feed for any task from this list."],
+      ["Set a daily screen-time limit","Your phone will tell you when it's time to stop."]
     ],ru:[
       ["Устрой час без телефона","Телефон в другую комнату на час — посмотри, что станет возможным."],
       ["Отключи уведомления на полдня","Используй «Не беспокоить» — специальные приложения не нужны."],
       ["Спрячь или удали 2–3 приложения-времясъеда","Скроллить станет в разы сложнее."],
-      ["Попробуй 10 дней без коротких видео","Заменяй ленту на любую задачу из списка."]
+      ["Попробуй 10 дней без коротких видео","Заменяй ленту на любую задачу из списка."],
+      ["Поставь лимит экранного времени в день","Телефон сам подскажет, когда пора остановиться."]
     ]}
   };
 function draw(arr,n){ var x=shuffleAll(arr); return x.slice(0,n) }
   function shuffleAll(arr){ for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;} return arr.slice() }
   function draftIdeas(score){
-    var sportPool = IDEAS.active[lang].concat(IDEAS.reset[lang]);
-    var devPool = IDEAS.learn[lang].concat(IDEAS.create[lang], IDEAS.reset[lang]);
+    // широкие пулы под категории
+    var activePool = IDEAS.active[lang].slice();
+    var learnPool = IDEAS.learn[lang].slice();
+    var createPool = IDEAS.create[lang].slice();
+    var resetPool = IDEAS.reset[lang].slice();
 
-    var q2 = answers[1], q5 = answers[4];
-    var picksSport = [];
-    var picksDev = [];
-    // вопрос 2 (множественный): чем заполняешь время
+    var q2 = answers[1], q5 = answers[4], q6 = answers[5], q8 = answers[7];
+
+    // СПОРТ: кто мало двигается (q6<=1) — больший приоритет спорта; иначе спорт спокойный
+    var sportWants = (typeof q6==="number" && q6<=1);
+    // САМОРАЗВИТИЕ: если много скроллит (q2) или нет целей (q8<=1) — сильнее развитие
+    var devWants = false;
+    if(Array.isArray(q2)){ if(q2.indexOf(0)>-1 || q2.indexOf(1)>-1) devWants=true; }
+    if(typeof q8==="number" && q8<=1) devWants=true;
+
+    // Спорт-пул: активные + чуть сбрасывающих
+    var sportPool = activePool;
+    // Саморазвитие-пул: учиться + творить
+    var devPool = learnPool.concat(createPool);
+
+    // случайный уникальный набор по 3 в каждой категории
+    var sport = draw(sportPool, 3);
+    if(!sportWants && typeof q6==="number" && q6>=3){
+      // уже активный — поменьше жёсткого спорта, можно добавить в развитие
+      devPool = devPool.concat(activePool.slice(0,1));
+    }
+    var dev = draw(devPool, 3);
+
+    // при слабых местах подмешиваем «сброс привычек» в оба блока
+    if(devWants){ dev = dev.length<3 ? dev.concat(draw(resetPool, 3-dev.length)) : dev; }
+    if(sportWants){ sport = sport.length<3 ? sport.concat(draw(resetPool, 3-sport.length)) : sport; }
+
+    // подстраховка от пустоты
+    if(!sport || sport.length<3) sport = sport.concat(draw(activePool.concat(resetPool), 3-sport.length));
+    if(!dev || dev.length<3) dev = dev.concat(draw(learnPool.concat(createPool), 3-dev.length));
+
+    return {sport:sport.slice(0,3), dev:dev.slice(0,3)};
+  }
+
+  /* Банк хобби — подбор под ответы */
+  var HOBBIES = {
+    active:{en:["Football or volleyball with friends","Bike or long walks in the evening","Swimming at the local pool","Badminton in the yard"],ru:["Футбол или волейбол с друзьями","Велосипед или длинные вечерние прогулки","Плавание в ближайшем бассейне","Бадминтон во дворе"]},
+    calm:{en:["Drawing or sketching","Playing a musical instrument","Photography — try a photo walk","Board games with family"],ru:["Рисование или скетчинг","Игра на музыкальном инструменте","Фотография — фото-прогулка","Настольные игры с семьёй"]},
+    minds:{en:["Reading fiction or non-fiction","Learning a language with an app","Coding — your first small project","Collecting and researching a topic"],ru:["Чтение художественной или научной книги","Изучение языка в приложении","Программирование — первый маленький проект","Коллекционирование и изучение темы"]},
+    social:{en:["Meet friends in person more often","Join a club or sports team","Volunteer — help someone","Learn to cook together"],ru:["Чаще встречаться с друзьями очно","Вступить в кружок или спортивную команду","Волонтёрство — помоги кому-то","Учиться готовить вместе"]},
+    reset:{en:["Try a 7-day no-scroll challenge","Dust off an old hobby you dropped","Plan one offline evening this week"],ru:["Челлендж: 7 дней без скролла","Вернись к старому хобби, которое бросил","Спланируй один вечер офлайн на этой неделе"]}
+  };
+  function pickHobby(){
+    var q2 = answers[1], q4 = answers[3], q6 = answers[5], q7 = answers[6];
+    var pool = [];
     if(Array.isArray(q2)){
-      if(q2.indexOf(0)>-1 && score==="great") devPool=IDEAS.learn[lang].slice(); // увлекается скроллом — пусть хотя бы из смототит развитие
-      if(q2.indexOf(0)>-1 || q2.indexOf(1)>-1) picksSport.push(sportPool.shift());
-      if(q2.indexOf(0)>-1 || q2.indexOf(1)>-1) picksDev.push(devPool.shift());
+      var scrolls = q2.indexOf(0)>-1 || q2.indexOf(1)>-1;
+      if(scrolls) pool = pool.concat(HOBBIES.reset[lang]);
     }
-    // вопрос 5 (хобби)
-    if(q5===0 || q5===1){
-      picksDev.push(IDEAS.learn[lang].concat(IDEAS.create[lang])[0] || devPool[0]);
-      if(!picksSport.length) picksSport.push(sportPool[0]);
-    } else if(q5>=2 && (score==="great"||score==="ok")){
-      picksDev.push(IDEAS.create[lang].concat(IDEAS.learn[lang])[0] || devPool[0]);
-    }
+    // движение
+    if(typeof q6==="number" && q6<=1) pool = pool.concat(HOBBIES.active[lang]);
+    else pool = pool.concat(HOBBIES.calm[lang]);
+    // прокрастинация
+    if(typeof q4==="number" && q4<=1) pool = pool.concat(HOBBIES.minds[lang]);
+    // общение
+    if(typeof q7==="number" && q7<=1) pool = pool.concat(HOBBIES.social[lang]);
+    if(!pool.length) pool = HOBBIES.calm[lang].concat(HOBBIES.active[lang]);
+    return draw(pool,1)[0];
+  }
 
-    // добиваем пулами
-    while(picksSport.length<3){ if(!sportPool.length) break; picksSport.push(sportPool.shift()); }
-    while(picksDev.length<3){ if(!devPool.length) break; picksDev.push(devPool.shift()); }
-    // подстраховка
-    if(picksSport.length<3) picksSport=picksSport.concat(IDEAS.active[lang].concat(IDEAS.reset[lang]));
-    if(picksDev.length<3) picksDev=picksDev.concat(IDEAS.learn[lang].concat(IDEAS.create[lang]));
-
-    return {sport:draw(picksSport,3), dev:draw(picksDev,3)};
+  /* ---------------- local stats (anonymous, device-only) ---------------- */
+  var LS_KEY = "tws_stats_v1";
+  function loadStats(){
+    try {
+      var raw = localStorage.getItem(LS_KEY);
+      if(raw) return JSON.parse(raw);
+    } catch(e){}
+    return {count:0, sum:0, good:0, mixed:0, wasted:0};
+  }
+  function saveStats(s){
+    try { localStorage.setItem(LS_KEY, JSON.stringify(s)); } catch(e){}
+  }
+  function recordResult(c){
+    var s = loadStats();
+    s.count = (s.count||0) + 1;
+    s.sum = (s.sum||0) + c.pct;
+    if(c.score==="great"||c.score==="ok") s.good = (s.good||0)+1;
+    else if(c.score==="mix") s.mixed = (s.mixed||0)+1;
+    else s.wasted = (s.wasted||0)+1;
+    saveStats(s);
+    return s;
   }
 
   /* ---------------- result ---------------- */
@@ -646,6 +878,13 @@ function draw(arr,n){ var x=shuffleAll(arr); return x.slice(0,n) }
     var ideas=draftIdeas(c.score);
     var res=l.RESULTS[c.score];
     var badgeCls = c.score==="mix"?"mix":(c.score==="great"||c.score==="ok"?"good":"warn");
+    var hobby = pickHobby();
+    var hobbyHtml =
+      '<div class="hobby-box">'+
+        '<h4>'+l.hobbyTitle+'</h4>'+
+        '<p>'+l.hobbySub+'</p>'+
+        '<div class="hobby-name">'+hobby+'</div>'+
+      '</div>';
     function colHtml(title,sub,arr){
       return '<div class="rec-col"><h4>'+title+'</h4><p>'+sub+'</p><ul>'+arr.map(function(x){return '<li><b>'+x[0]+'</b> — '+x[1]+'</li>'}).join("")+'</ul></div>';
     }
@@ -655,6 +894,47 @@ function draw(arr,n){ var x=shuffleAll(arr); return x.slice(0,n) }
     '</div>';
     var tipHtml=l.tipList.map(function(x){return '<li><b>'+x[0]+':</b> '+x[1]+'</li>'}).join("");
     var ringOuter=376.8;
+    var extraTips = "";
+    var answeredExtra = extraAnswers.every(function(a){ return typeof a==="number"; });
+    if(answeredExtra){
+      var tipSource = t().EXTRA;
+      var picked = [];
+      // триггер скролла (вопрос 0)
+      var trig = extraAnswers[0];
+      if(typeof trig==="number"){
+        if(trig===0) picked.push(l.exTrigger);
+        else picked.push(l.exHabit);
+      }
+      // барьер (вопрос 1)
+      var barrier = extraAnswers[1];
+      if(typeof barrier==="number"){
+        if(barrier===0) picked.push(l.exNoIdea);
+        else picked.push(l.exLazy);
+      }
+      // желаемый результат (вопрос 2)
+      var want = extraAnswers[2];
+      if(typeof want==="number"){
+        if(want===0) picked.push(l.exRest);
+        else picked.push(l.exGrow);
+      }
+      extraTips = '<div class="panel good" style="margin-top:14px"><h3>'+l.extraTargetTitle+'</h3><ul>'+picked.map(function(x){return '<li>'+x+'</li>'}).join("")+'</ul></div>';
+    }
+    var statsData = recordResult(c);
+    var wastedPct = statsData.count ? Math.round((statsData.wasted/statsData.count)*100) : 0;
+    var mixedPct = statsData.count ? Math.round((statsData.mixed/statsData.count)*100) : 0;
+    var goodPct = statsData.count ? Math.round((statsData.good/statsData.count)*100) : 0;
+    var avgScore = statsData.count ? Math.round(statsData.sum/statsData.count) : 0;
+    var localStatsHtml =
+      '<div class="panel good" style="margin-top:18px">'+
+        '<h4>'+l.counterTitle+'</h4>'+
+        '<p class="note">'+l.counterSub+'</p>'+
+        '<div class="stat-row"><div class="stat-top"><b>'+l.statTitle+'</b></div></div>'+
+        '<div class="stat-row"><div class="stat-top"><b>'+l.statAttempts+'</b><span>'+statsData.count+'</span></div></div>'+
+        '<div class="stat-row"><div class="stat-top"><b>'+l.statAvgScore+'</b><span>'+avgScore+'%</span></div></div>'+
+        '<div class="stat-row"><div class="stat-top"><b>'+l.statWasted+'</b><span>'+wastedPct+'%</span></div></div>'+
+        '<div class="stat-row"><div class="stat-top"><b>'+l.statMixed+'</b><span>'+mixedPct+'%</span></div></div>'+
+        '<div class="stat-row"><div class="stat-top"><b>'+l.statTop+'</b><span>'+goodPct+'%</span></div></div>'+
+      '</div>';
     $("resultCard").innerHTML =
       '<div class="result-hero">'+
         '<div class="ring"><svg viewBox="0 0 130 130" aria-hidden="true">'+
@@ -669,7 +949,10 @@ function draw(arr,n){ var x=shuffleAll(arr); return x.slice(0,n) }
       barsRows+
       '<h3 class="sect">'+l.sectionIdeas+'</h3><p class="note">'+l.sectionIdeasNote+'</p>'+
       recHtml+
-      '<div class="panel warn"><h3><span class="badge warn">'+l.restartTip+'</span> '+l.panelTip+'</h3><ul>'+tipHtml+'</ul></div>';
+      hobbyHtml+
+      extraTips+
+      '<div class="panel warn"><h3><span class="badge warn">'+l.restartTip+'</span> '+l.panelTip+'</h3><ul>'+tipHtml+'</ul></div>'+
+      localStatsHtml;
 
     var statsHtml =
       '<div class="why">'+
@@ -706,10 +989,23 @@ function draw(arr,n){ var x=shuffleAll(arr); return x.slice(0,n) }
   /* ---------------- listeners ---------------- */
   $("startBtn").addEventListener("click",function(){ show("quiz"); goTo(0); });
   $("nextBtn").addEventListener("click",function(){
-    if(current<6-1){ goTo(current+1); } else { show("result"); renderResult(); }
+    if(inExtra){
+      if(extraCurrent<EXTRA_COUNT-1){ extraCurrent++; renderQuestion(); }
+      else { inExtra=false; show("result"); renderResult(); }
+    } else {
+      if(current<ALL_COUNT-1){ goTo(current+1); }
+      else {
+        var c = compute();
+        if(c.score==="poor"||c.score==="mix"){ inExtra=true; extraCurrent=0; renderQuestion(); }
+        else { show("result"); renderResult(); }
+      }
+    }
   });
-  $("backBtn").addEventListener("click",function(){ if(current>0) goTo(current-1); });
-  $("restartBtn").addEventListener("click",function(){ answers=new Array(6).fill(null); current=0; show("welcome"); });
+  $("backBtn").addEventListener("click",function(){
+    if(inExtra){ if(extraCurrent>0){ extraCurrent--; renderQuestion(); } }
+    else { if(current>0) goTo(current-1); }
+  });
+  $("restartBtn").addEventListener("click",function(){ resetAnswers(); current=0; show("welcome"); });
   $("langEn").addEventListener("click",function(){ setLang("en"); });
   $("langRu").addEventListener("click",function(){ setLang("ru"); });
 
