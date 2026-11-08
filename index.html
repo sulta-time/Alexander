@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Time Well Spent — Свободное время с пользой</title>
+<style>
+  :root{
+    --ink:#1c2b2b;
+    --ink-soft:#52605f;
+    --paper:#f7f3ea;
+    --card:#fffdf7;
+    --line:#e4dccb;
+    --accent:#2f7d5a;
+    --accent-dark:#23583f;
+    --accent-soft:#e0efe6;
+    --warn:#c2503e;
+    --shadow:0 10px 30px rgba(28,43,43,.12);
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    background:
+      radial-gradient(1200px 500px at 85% -50px, #dcefdd 0%, transparent 60%),
+      radial-gradient(900px 400px at -10% 20%, #f0e4c8 0%, transparent 55%),
+      var(--paper);
+    color:var(--ink);
+    line-height:1.55;
+    min-height:100vh;
+  }
+  .shell{max-width:840px;margin:0 auto;padding:32px 20px 70px}
+  header.top{display:flex;align-items:center;gap:12px;margin-bottom:26px;flex-wrap:wrap}
+  .logo{
+    width:46px;height:46px;border-radius:14px;flex:0 0 auto;
+    background:linear-gradient(135deg,var(--accent),#56a97d);
+    display:grid;place-items:center;color:#fff;font-size:22px;
+    box-shadow:var(--shadow);
+  }
+  .brand b{display:block;font-size:18px;letter-spacing:.2px}
+  .brand span{font-size:13px;color:var(--ink-soft)}
+  .topright{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .lang{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--card)}
+  .lang button{border:none;background:transparent;padding:7px 16px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;color:var(--ink-soft)}
+  .lang button.active{background:var(--accent);color:#fff}
+  .hint{font-size:12.5px;color:var(--ink-soft);background:var(--card);border:1px solid var(--line);padding:6px 12px;border-radius:999px}
+  @media(max-width:520px){.topright{margin-left:0;width:100%;justify-content:space-between}.hint{order:3;margin-top:2px}}
+
+  .screen{display:none;animation:rise .45s ease both}
+  .screen.active{display:block}
+  @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px 30px}
+  @media(max-width:520px){.card{padding:22px 18px}}
+
+  .hero-card{background:linear-gradient(135deg,#23583f 0%,#2f7d5a 60%,#4f976f 100%);color:#fff;border:none}
+  .hero-card .lede{color:#e5f3ea}
+  .hero-card .logo{background:rgba(255,255,255,.16);box-shadow:none;margin-bottom:6px}
+  .hero-title{font-size:33px;line-height:1.15;margin:6px 0 12px;letter-spacing:-.5px}
+  @media(max-width:520px){.hero-title{font-size:26px}}
+  .lede{font-size:17px;color:var(--ink-soft);max-width:60ch}
+  .hero-card .lede{color:#e5f3ea}
+  .arrows{display:flex;gap:12px;margin:6px 0 22px;flex-wrap:wrap}
+  .arrow{display:flex;gap:9px;align-items:center;font-size:13.5px;background:rgba(255,255,255,.14);padding:8px 13px;border-radius:999px}
+  .audience{margin-top:22px;padding-top:20px;border-top:1px solid rgba(255,255,255,.25)}
+  .audience h3{margin:0 0 12px;font-size:15px;color:#d4ecdd}
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:520px){.tiles{grid-template-columns:1fr}}
+  .tile{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:13px 15px}
+  .tile b{display:block;font-size:14.5px;margin-bottom:3px}
+  .tile span{font-size:13px;color:#d4ecdd}
+
+  h2.q{margin:0 0 6px;font-size:21px}
+  .q-sub{color:var(--ink-soft);font-size:14.5px;margin:0 0 18px}
+  .progress{height:8px;background:var(--line);border-radius:999px;overflow:hidden;margin-bottom:22px}
+  .progress i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#56a97d);border-radius:999px;transition:width .4s ease}
+
+  .opts{display:grid;gap:10px}
+  .opt{
+    display:flex;gap:12px;align-items:flex-start;cursor:pointer;
+    border:2px solid var(--line);border-radius:12px;padding:14px 16px;
+    background:#fff;transition:border-color .15s, background .15s;
+  }
+  .opt:hover{border-color:var(--accent)}
+  .opt input{margin-top:4px;accent-color:var(--accent);width:17px;height:17px}
+  .opt .tt{font-weight:600;font-size:15px;display:block}
+  .opt .dd{font-size:13px;color:var(--ink-soft)}
+  .opt.selected{border-color:var(--accent);background:var(--accent-soft)}
+
+  .btn{
+    border:none;cursor:pointer;font-family:inherit;
+    background:var(--accent);color:#fff;font-size:16px;font-weight:600;
+    padding:14px 26px;border-radius:12px;transition:background .15s;
+  }
+  .btn:hover{background:var(--accent-dark)}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .btn.ghost{background:transparent;color:var(--ink-soft);border:2px solid var(--line);font-weight:600}
+  .btn.ghost:hover{background:var(--paper);color:var(--ink)}
+  .actions{display:flex;justify-content:space-between;gap:12px;margin-top:24px;align-items:center}
+
+  .result-hero{display:flex;gap:20px;align-items:center;margin-bottom:22px;flex-wrap:wrap}
+  .ring{position:relative;width:130px;height:130px;flex:0 0 auto}
+  .ring svg{transform:rotate(-90deg);width:130px;height:130px}
+  .ring .bg{stroke:var(--line);fill:none;stroke-width:13}
+  .ring .fg{stroke:var(--accent);fill:none;stroke-width:13;stroke-linecap:round;stroke-dasharray:376.8;transition:stroke-dashoffset 1s ease}
+  .ring .num{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font-size:28px;font-weight:700}
+  .ring .num small{display:block;font-size:11.5px;color:var(--ink-soft);font-weight:600;line-height:1.2;max-width:90px;margin:0 auto}
+  .result-title{font-size:26px;margin:0 0 4px}
+  .result-sub{color:var(--ink-soft);font-size:15px;max-width:46ch}
+  .badge{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.4px;display:inline-block}
+  .badge.good{background:#2f7d5a;color:#fff}
+  .badge.warn{background:#c2503e;color:#fff}
+  .badge.mix{background:#c98a1b;color:#fff}
+
+  .panel{border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+  .panel.good{background:#f0f7f1;border-color:#cfe5d5}
+  .panel.warn{background:#fbf1ee;border-color:#ecd2cb}
+  .panel h3{margin:0 0 4px;font-size:17px}
+  .panel ul{margin:6px 0;padding-left:20px}
+  .panel li{margin:6px 0}
+  @media print{.lang,.actions{display:none}.screen{display:block}}
+
+  .bar-row{margin-bottom:12px}
+  .bar-top{display:flex;justify-content:space-between;gap:12px;font-size:13.5px;margin-bottom:5px}
+  .bar-top b{color:var(--ink);font-weight:600}
+  .bar-top span{color:var(--ink-soft);white-space:nowrap}
+  .bar{height:18px;background:var(--line);border-radius:999px;overflow:hidden}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#56a97d);border-radius:999px;transition:width 1s ease}
+
+  .sect{margin:22px 0 8px;font-size:17.5px;display:flex;gap:9px;align-items:center}
+  .note{font-size:13px;color:var(--ink-soft);margin:0 0 14px;max-width:70ch}
+
+  .why{margin:10px 0 0}
+  .why h3{margin:26px 0 6px;font-size:16.5px}
+  .why-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:520px){.why-cards{grid-template-columns:1fr}}
+  .why-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+  .why-card b{display:block;font-size:14.5px;margin-bottom:3px}
+  .why-card span{font-size:13px;color:var(--ink-soft)}
+  .stat-row{margin-bottom:12px}
+  .stat-top{display:flex;justify-content:space-between;gap:12px;font-size:13.5px;margin-bottom:5px}
+  .stat-top b{color:var(--ink)}
+  .stat-top span{font-weight:800;color:var(--accent-dark);white-space:nowrap}
+  .stat-src{font-size:11.5px;color:var(--ink-soft);margin:10px 0 0}
+
+  .rec-col h4{margin:0 0 3px;font-size:16px;color:var(--accent-dark)}
+  .rec-col p{margin:0 0 10px;font-size:12.5px;color:var(--ink-soft)}
+  .rec-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:520px){.rec-grid{grid-template-columns:1fr}}
+  .store{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:14px 0 4px;padding-bottom:16px;border-bottom:1px dashed var(--line)}
+  .store a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:inherit}
+  .store .qrc{width:11px}
+  .pill2{display:inline-block;font-size:12px;background:var(--accent);color:#fff;border-radius:999px;padding:4px 12px;margin-top:6px}
+
+  .footer{margin-top:30px;text-align:center;font-size:12.5px;color:var(--ink-soft)}
+  .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <header class="top">
+    <div class="logo" aria-hidden="true">⏳</div>
+    <div class="brand">
+      <b id="brandTitle">Time Well Spent</b>
+      <span id="brandSub">Как провести свободное время с пользой</span>
+    </div>
+    <div class="topright">
+      <div class="lang" role="group" aria-label="Language / Язык">
+        <button id="langEn" type="button" data-lang="en" class="active">EN</button>
+        <button id="langRu" type="button" data-lang="ru">RU</button>
+      </div>
+      <span class="hint" id="stepHint">Шаг 1 · 6 вопросов</span>
+    </div>
+  </header>
+
+  <main id="app" aria-live="polite">
+
+    <!-- WELCOME -->
+    <section class="screen active" id="s-welcome">
+      <div class="card hero-card">
+        <span class="logo" aria-hidden="true">⏳</span>
+        <h1 class="hero-title" id="wTitle">Куда уходит твой свободный день?</h1>
+        <p class="lede" id="wLede">6 коротких вопросов о том, как ты проводишь свободное время. В конце — честная оценка и персональные идеи, чем заняться с пользой.</p>
+        <div class="arrows">
+          <span class="arrow">📊 <span id="wA1">6 вопросов</span></span>
+          <span class="arrow">💡 <span id="wA2">30+ идей</span></span>
+          <span class="arrow">🕐 <span id="wA3">2 минуты</span></span>
+        </div>
+        <div class="audience">
+          <h3 id="wFor">Кому подходит</h3>
+          <div class="tiles">
+            <div class="tile"><b>🎓 <span data-i="forStudents">Ученикам</span></b><span data-i="forStudentsT">Свободное время после уроков и домашки</span></div>
+            <div class="tile"><b>💼 <span data-i="forAdults">Взрослым</span></b><span data-i="forAdultsT">Вечера и выходные после работы и дел</span></div>
+          </div>
+        </div>
+        <div class="store">
+          <a id="linkWrap" href="#" target="_blank" rel="noopener">
+            <span>⏳</span><span id="linkText" data-i="linkText">Пройти опрос онлайн</span>
+          </a>
+          <img class="qrc" id="qrImg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAFyAQAAAADAX2ykAAACuUlEQVR4nO1aUYqkMBB9VQr9qbAHmKPYN9gjzZn2BuYofYAB/WxQakklOt0uRIWdxrT1PsRYDynyqEqlEhLsgeNddMD4afCKfQnjp8Er9iWMnwav2Jcwfhq8Yl/C+GeYH4ooAUcl6NoTPTwU1xf6sx28g3tifiMeHUDXagDchwhQ+QcKNcmx/d8MPim/jxEqbU+EphsJgD40ustX+7MVvJl5Tn65/NDIWAr62mdqQNC/1h82/o/OD137i2iSllaH//n/a+BVxjOMvy1+K7/A9oC4ughfqNE113974Nt8psHH5DstkWuAPjs/7i8C9L6SxhjK59f6sxm8nXri+JV5LK4GaRCHt+foPZ7/bPw0RDc/TVeERxzKoDlbdOOkw2BpbT7T4IPxEXQT1Te8RmmjoH7/205Km7659q8+7qSLMBzFpTcMUd2JPm+2/maqLx7CNIQupkzdzpTWb5csP+esbzUATeeHQdoitiZbNXjhLT9n3r8SYCjhft99Vv7ypfMEV3dCx/Sfjb+jfsYcv/qGCG+w+M2+fkboSsb8HNdkr3mQ2+rnnPkjobldJPavKk3Sgz8pjOuvnf/mX1/J1Nr4bmiIDufdsfU3stQXQVXNxeFUX7NyEVtXs/qmb576SlB1OhWMtza6WWQtvEzfbPVFSM1BxilgvxEblxa/ufJFK2QfxNNdnBi1UOF99WX1Vc7xi+esPG+CoaWVVtK2/r7D/ckA548bgFnaWzktzAf1fzP4rP0rTNugKX6jvgqL33fhiy+YwyXoRiut0MmKS/Tx/V8Dn/x+LDV/RhL0vwZxVAzUdLW/Dg2hpj2i/2z83fcnBwL0EuVIvj9ZwtVfZUzVNp9p8MHrZ+C5albY+dH73J9EwKBvsvx8OP/Z+Elw2vwPjJ8Gr9iXMH4avGJfwvhp8Ip9CeOn8dPz8xeVYfWU86yJXAAAAABJRU5ErkJggg==" alt="QR-code link">
+        </div>
+        <h3 id="whyTitle" data-i="whyTitle" style="display:none"></h3>
+        <div class="actions">
+          <button class="btn" id="startBtn" type="button" data-i="startBtn">Начать опрос</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section class="screen" id="s-quiz">
+      <div class="card">
+        <div class="progress" id="progress"><i id="progressBar" style="width:0%"></i></div>
+        <h2 class="q" id="qTitle">Вопрос</h2>
+        <p class="q-sub" id="qSub"></p>
+        <div class="opts" id="qOpts" role="radiogroup" aria-label="Options"></div>
+        <div class="actions">
+          <button class="btn ghost" id="backBtn" type="button" data-i="backBtn">← Назад</button>
+          <button class="btn" id="nextBtn" type="button" disabled data-i="nextBtn">Далее →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULT -->
+    <section class="screen" id="s-result">
+      <div class="card" id="resultCard"></div>
+      <div class="actions" style="justify-content:center">
+        <button class="btn ghost" type="button" id="restartBtn" data-i="restartBtn">Пройти заново</button>
+      </div>
+      <div class="card" id="statsWrap" style="margin-top:14px;display:none">
+        <h3 class="sect" id="statsHeader" style="margin-top:0">📊 <span data-i="secStats">Это стоит знать</span></h3>
+        <div id="statsBody"></div>
+      </div>
+      <p class="footer" id="footerNote">Проект по английскому языку · English project</p>
+    </section>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var STR = {
+    en: {
+      brandSub:"Make the most of your free time",
+      step:"Step", of:"of",
+      chooseMany:"choose more than one",
+      wTitle:"Where does your free time go?",
+      wLede:"Six short questions about how you spend your free time. You get an honest result and personal ideas for spending it well.",
+      wA1:"6 questions", wA2:"30+ ideas", wA3:"2 minutes",
+      wFor:"For everyone",
+      forStudents:"For students", forStudentsT:"Free time after lessons and homework",
+      forAdults:"For adults", forAdultsT:"Evenings and weekends after work and chores",
+      linkText:"Take the quiz online",
+      whyTitle:"Why time slips away",
+      why1t:"📱 Endless feed", why1d:"Social media and short videos are built to keep you scrolling longer.",
+      why2t:"🔔 Notifications", why2d:"Every ping interrupts your work and can steal up to 20 minutes of focus.",
+      why3t:"🖥️ Multitasking", why3d:"Doing too many things at once makes you slower, not faster.",
+      why4t:"😴 Being tired", why4d:"Too much load without rest — and your brain picks the easy «fuel» of scrolling.",
+      whyStat:"How much of life is lost for nothing",
+      st1t:"Hours online — average per day", st2t:"Of that, time on social media — per day",
+      st3t:"Years people «spend» on the internet", stSrc:"Source: DataReportal / We Are Social, Global Digital Report",
+      st1v:"4.7 h", st2v:"2 h 20 m", st3v:"~10 years",
+      startBtn:"Start the quiz",
+      backBtn:"← Back", nextBtn:"Next →", restartBtn:"Take it again",
+      footerNote:"English project · Проект по английскому языку",
+      resultPhLabel:"well spent",
+      fromQ:"How well do you use your free time?", appx:"useful",
+      sectionBreakdown:"📊 Your answers, one by one", sectionBreakdownNote:"How 'useful' your choice was on each question.",
+      sectionIdeas:"💡 Ideas to spend time well", sectionIdeasNote:"Picked for your answers. Choose one and start today.",
+      panelDone:"4 easy steps",
+      panelTip:"How to start when you feel like doing nothing",
+      restartTip:"Tip",
+      secStats:"You should know this",
+      recSport:"🏃 Sport & movement", recSportSub:"Move a little every day — it gives you energy back",
+      recDev:"📚 Self-development", recDevSub:"Learn and grow even 15–20 minutes at a time",
+      ringPct:"",
+      QUIZ:[
+        {t:"Do you choose how you spend your free time?", s:"Think about whether your free time follows a plan or just happens.",
+          opts:[
+            {v:0,t:"No — it just happens",d:"I open my phone and time disappears"},
+            {v:1,t:"Depends on the day",d:"Sometimes I plan it, sometimes not"},
+            {v:2,t:"Usually yes",d:"I often decide what to do on purpose"},
+            {v:3,t:"Almost always",d:"I plan and spend my free time with a reason"}
+          ]},
+        {t:"What usually fills your free time?", s:"Pick every activity that takes your time.", multi:true,
+          opts:[
+            {v:1,t:"Scrolling social media / short videos",d:"I swipe and scroll for hours"},
+            {v:1,t:"TV series, YouTube, streams",d:"I just watch"},
+            {v:2,t:"Video games",d:"I play, but can't stop"},
+            {v:3,t:"Hobbies, sport, learning, meeting people",d:"Things that are good for me"}
+          ]},
+        {t:"Do you turn off notifications when you work?", s:"Does your phone stay quiet or keep pulling you in?",
+          opts:[
+            {v:0,t:"It keeps pulling me",d:"I check every notification"},
+            {v:1,t:"Not always",d:"It depends on my mood"},
+            {v:2,t:"I often use «Do Not Disturb»",d:"I put my phone on silent"},
+            {v:3,t:"I almost always turn them off",d:"My phone doesn't control me"}
+          ]},
+        {t:"How often do you procrastinate?", s:"Procrastination — putting off important things until later.",
+          opts:[
+            {v:0,t:"All the time",d:"It's hard to start even urgent tasks"},
+            {v:1,t:"Often",d:"I get stuck regularly"},
+            {v:2,t:"Sometimes",d:"Depends on my mood"},
+            {v:3,t:"Rarely",d:"I usually start right away"}
+          ]},
+        {t:"Do you have a hobby besides scrolling?", s:"Something you do because it's interesting.",
+          opts:[
+            {v:0,t:"No, I haven't found one",d:"My phone eats all my time"},
+            {v:1,t:"I tried, but gave up",d:"No lasting interest"},
+            {v:2,t:"Yes, but I rarely do it",d:"I wait for special energy"},
+            {v:3,t:"Yes, I have a favourite thing",d:"I do it regularly"}
+          ]},
+        {t:"When are you truly happy with your day?", s:"Which evening feels like a good one?",
+          opts:[
+            {v:0,t:"Lost hours in my phone",d:"Time just disappeared"},
+            {v:1,t:"Watched a lot, but felt empty",d:"Not much satisfaction"},
+            {v:2,t:"Did something and rested",d:"Some balance"},
+            {v:3,t:"Learned, did, walked, created",d:"I feel the day was well spent"}
+          ]}
+      ],
+      RESULTS:{
+        great:{b:"High value", title:"Great time management!", sub:"You know how to fill your day with meaning. Now build the habit and try something new."},
+        ok:{b:"Good balance", title:"Good balance, tiny fixes", sub:"You do a lot right. Some wasted time remains — close it with the habits below."},
+        mix:{b:"Mixed", title:"Somewhere in the middle", sub:"Part of your time is useful, but digital time-eaters get in the way. Swap part of the feed for real activities."},
+        poor:{b:"Needs attention", title:"Too much time slips away", sub:"Don't worry — this is fixable. You don't need to change everything. Just swap the feed for useful things step by step."}
+      },
+      tipList:[
+        ["Rule of 2 minutes","Start with just two minutes — then it's harder to stop."],
+        ["Put your phone in another room","Do your activity without it nearby."],
+        ["Track your «dead time»","Notice how much the feed eats — and you'll want to cut it."]
+      ],
+      prettier:null
+    },
+
+    ru: {
+      brandSub:"Как провести свободное время с пользой",
+      step:"Шаг", of:" · вопросов",
+      chooseMany:"можно выбрать несколько",
+      wTitle:"Куда уходит твой свободный день?",
+      wLede:"6 коротких вопросов о том, как ты проводишь свободное время. В конце — честная оценка и персональные идеи, чем заняться с пользой.",
+      wA1:"6 вопросов", wA2:"30+ идей", wA3:"2 минуты",
+      wFor:"Кому подходит",
+      forStudents:"Ученикам", forStudentsT:"Свободное время после уроков и домашки",
+      forAdults:"Взрослым", forAdultsT:"Вечера и выходные после работы и дел",
+      linkText:"Пройти опрос онлайн",
+      whyTitle:"Почему время уходит впустую",
+      why1t:"📱 Бесконечная лента", why1d:"Соцсети и короткие видео рассчитаны на то, чтобы удержать тебя как можно дольше.",
+      why2t:"🔔 Уведомления", why2d:"Каждый пуш прерывает дело и «крадёт» до 20 минут на возврат концентрации.",
+      why3t:"🖥️ Мультизадачность", why3d:"Псевдо-одновременные дела делают нас медленнее, а не быстрее.",
+      why4t:"😴 Усталость", why4d:"Нагрузка без отдыха — и мозг выбирает «топливо» в виде скролла.",
+      whyStat:"Сколько жизни теряется просто так",
+      st1t:"Часов в интернете — в среднем в день", st2t:"Из них в соцсетях — в день",
+      st3t:"Так люди «проживают» в Сети", stSrc:"Источник: DataReportal / We Are Social, Global Digital Report",
+      st1v:"4,7 ч", st2v:"2 ч 20 мин", st3v:"~10 лет",
+      startBtn:"Начать опрос",
+      backBtn:"← Назад", nextBtn:"Далее →", restartBtn:"Пройти заново",
+      footerNote:"Проект по английскому языку · English project",
+      resultPhLabel:"пользы",
+      fromQ:"Насколько с пользой ты проводишь свободное время?", appx:"пользы",
+      sectionBreakdown:"📊 Разбор по вопросам", sectionBreakdownNote:"Насколько твой выбор «полезен» — от вопроса к вопросу.",
+      sectionIdeas:"💡 Идеи, чем заняться с пользой", sectionIdeasNote:"Подобрано под твои ответы. Выбери одну и начни сегодня.",
+      panelDone:"4 шага",
+      panelTip:"Как начать, если ничего не хочется",
+      restartTip:"Подсказка",
+      secStats:"Это стоит знать",
+      recSport:"🏃 Спорт и движение", recSportSub:"Двигайся немного каждый день — это возвращает энергию",
+      recDev:"📚 Саморазвитие", recDevSub:"Учись и развивайся хоть по 15–20 минут",
+      ringPct:"",
+      QUIZ:[
+        {t:"Самостоятельно ли ты выбираешь, как проводить свободное время?", s:"Подумай: твоё свободное время идёт по плану или просто «случается».",
+          opts:[
+            {v:0,t:"Нет — оно просто случается",d:"Открываю телефон, и время исчезает"},
+            {v:1,t:"Зависит от дня",d:"Иногда планирую, иногда нет"},
+            {v:2,t:"Обычно да",d:"Часто осознанно решаю, чем заняться"},
+            {v:3,t:"Почти всегда",d:"Планирую и трачу свободное время осознанно"}
+          ]},
+        {t:"Чем обычно заполняешь свободное время?", s:"Отметь всё, что занимает твоё время.", multi:true,
+          opts:[
+            {v:1,t:"Лента соцсетей / короткие видео",d:"Скроллю и листаю"},
+            {v:1,t:"Сериалы, YouTube, стримы",d:"Просто смотрю"},
+            {v:2,t:"Игры",d:"Играю, но не могу остановиться"},
+            {v:3,t:"Хобби, спорт, учёба, встречи",d:"Занятия, которые мне полезны"}
+          ]},
+        {t:"Отключаешь ли ты уведомления во время дела?", s:"Телефон кажется тихим или постоянно тебя дёргает?",
+          opts:[
+            {v:0,t:"Почти всегда дёргает",d:"Ловлю каждое уведомление"},
+            {v:1,t:"Контролирую не всегда",d:"Зависит от настроения"},
+            {v:2,t:"Часто включаю «Не беспокоить»",d:"Ставлю на беззвучный"},
+            {v:3,t:"Почти всегда отключаю",d:"Телефон мне не командует"}
+          ]},
+        {t:"Как часто ты прокрастинируешь?", s:"Прокрастинация — когда откладываешь важное на потом.",
+          opts:[
+            {v:0,t:"Постоянно",d:"Сложно начать даже срочные дела"},
+            {v:1,t:"Часто",d:"Регулярно упираюсь"},
+            {v:2,t:"Иногда",d:"Бывает под настроение"},
+            {v:3,t:"Редко",d:"Обычно начинаю сразу"}
+          ]},
+        {t:"Есть ли у тебя хобби помимо «листания»?", s:"Что-то, чем ты занимаешься, потому что это интересно.",
+          opts:[
+            {v:0,t:"Нет, не придумал",d:"Всё время уходит в телефон"},
+            {v:1,t:"Пробовал, но бросил",d:"Нет устойчивого интереса"},
+            {v:2,t:"Есть, но редко занимаюсь",d:"Жду особого настроения"},
+            {v:3,t:"Да, есть любимое дело",d:"Занимаюсь регулярно"}
+          ]},
+        {t:"Когда ты честно доволен своим днём?", s:"Какой вечер для тебя — «удачный»?",
+          opts:[
+            {v:0,t:"Завис в телефоне без счёта времени",d:"Время будто испарилось"},
+            {v:1,t:"Всё посмотрел, но пусто внутри",d:"Довольства мало"},
+            {v:2,t:"Что-то успел + отдохнул",d:"Баланс есть, но рваный"},
+            {v:3,t:"Учился, делал, гулял, что-то создал",d:"Чувствую, что день прожит не зря"}
+          ]}
+      ],
+      RESULTS:{
+        great:{b:"Высокая польза", title:"Отличное времяпрепровождение!", sub:"Ты умеешь наполнять день смыслом. Теперь задача — укрепить привычку и попробовать что-то новое."},
+        ok:{b:"Хороший баланс", title:"Хороший баланс с мелким ремонтом", sub:"Многое ты делаешь правильно. Мешает небольшая доля «мёртвого» времени — её можно закрыть привычками ниже."},
+        mix:{b:"Смешанно", title:"Середина: есть куда расти", sub:"Часть времени проходит с пользой, но мешают цифровые «времясъеды». Попробуй заменить часть ленты на конкретные занятия."},
+        poor:{b:"Требует внимания", title:"Много времени уходит в никуда", sub:"Не расстраивайся — это поправимо. Тебе не нужно «всё менять». Достаточно шаг за шагом подменять ленту полезными занятиями."}
+      },
+      tipList:[
+        ["Правило 2 минут","Начни всего с двух минут — дальше уже труднее остановиться."],
+        ["Убери телефон в другую комнату","Занимайся делом без него рядом."],
+        ["Отслеживай «мёртвое время»","Заметишь, сколько съедает лента, — и захочется сократить."]
+      ],
+      prettier:null
+    }
+  };
+
+  /* ---------------- state ---------------- */
+  var lang = "ru";
+  var answers = new Array(6).fill(null);
+  var current = 0;
+  var SHARE_LINK = "http://192.168.1.80:8090/";
+  var $ = function(id){ return document.getElementById(id) };
+  var screens={welcome:$("s-welcome"),quiz:$("s-quiz"),result:$("s-result")};
+  function t(){ return STR[lang] }
+  function S(){ return t().QUIZ }
+  function stepLabel(){ var l=t(); return (l.step+" "+(current+1)+" "+l.of+" 6") }
+
+  function show(name){
+    for(var k in screens){ screens[k].classList.toggle("active", k===name) }
+    $("stepHint").style.opacity = name==="quiz" ? "1":"0";
+  }
+
+  /* ---------------- language ---------------- */
+  function applyStatic(){
+    var l=t();
+    document.documentElement.lang = lang;
+    document.title = lang==="en" ? "Time Well Spent — Free Time With a Purpose" : "Время с пользой — свободное время осмысленно";
+    $("brandSub").textContent = l.brandSub;
+    $("wTitle").textContent = l.wTitle;
+    $("wLede").textContent = l.wLede;
+    $("wA1").textContent = l.wA1;
+    $("wA2").textContent = l.wA2;
+    $("wA3").textContent = l.wA3;
+    $("wFor").textContent = l.wFor;
+    $("footerNote").textContent = l.footerNote;
+    document.querySelectorAll("[data-i]").forEach(function(el){
+      var k=el.getAttribute("data-i");
+      if(l[k]!=null) el.textContent = l[k];
+    });
+    if(l.st1v && $("st1v")) $("st1v").textContent = l.st1v;
+    if(l.st2v && $("st2v")) $("st2v").textContent = l.st2v;
+    if(l.st3v && $("st3v")) $("st3v").textContent = l.st3v;
+    var lw = $("linkWrap");
+    if(SHARE_LINK) lw.href = SHARE_LINK;
+    $("langEn").classList.toggle("active", lang==="en");
+    $("langRu").classList.toggle("active", lang==="ru");
+    $("qSub").setAttribute("aria-label", "");
+  }
+  function setLang(l){
+    lang = l;
+    applyStatic();
+    if(screens.quiz.classList.contains("active")) renderQuestion();
+    if(screens.result.classList.contains("active")) renderResult();
+  }
+
+  /* ---------------- quiz render ---------------- */
+  function renderQuestion(){
+    var l=t(); var q=l.QUIZ[current];
+    var multi = !!q.multi;
+    $("qTitle").textContent = q.t;
+    $("qSub").textContent = q.s + (multi ? "  (" + l.chooseMany + ")" : "");
+    $("stepHint").textContent = stepLabel();
+    $("progressBar").style.width = ((current)/l.QUIZ.length*100)+"%";
+    if(multi && !Array.isArray(answers[current])) answers[current]=[];
+    var box=$("qOpts"); box.innerHTML="";
+    box.setAttribute("role", multi?"group":"radiogroup");
+    q.opts.forEach(function(o,idx){
+      var isSel = multi
+        ? (answers[current].indexOf(idx)>-1)
+        : (answers[current]===idx);
+      var label=document.createElement("label");
+      label.className="opt"+(isSel?" selected":"");
+      label.setAttribute("role", multi?"checkbox":"radio");
+      label.setAttribute("aria-checked", isSel?"true":"false");
+      label.tabIndex=0;
+      label.innerHTML='<input type="'+(multi?"checkbox":"radio")+'" name="q" value="'+idx+'"'+(isSel?' checked':'')+'>'+
+        '<span><span class="tt"></span><span class="dd"></span></span>';
+      label.querySelector(".tt").textContent=o.t;
+      label.querySelector(".dd").textContent=o.d;
+      function select(){
+        if(multi){
+          var arr=answers[current];
+          var pos=arr.indexOf(idx);
+          if(pos>-1) arr.splice(pos,1); else arr.push(idx);
+          label.classList.toggle("selected", pos>-1);
+          label.setAttribute("aria-checked", pos>-1?"false":"true");
+          var inp=label.querySelector("input"); if(inp){ inp.checked=pos===-1; inp.focus(); }
+        } else {
+          answers[current]=idx;
+          box.querySelectorAll(".opt").forEach(function(el,i){ el.classList.toggle("selected",i===idx); el.setAttribute("aria-checked",i===idx?"true":"false"); });
+          var r=box.querySelector('input[value="'+idx+'"]'); if(r){r.checked=true; r.focus();}
+        }
+        $("nextBtn").disabled = vaild();
+      }
+      label.addEventListener("click",select);
+      label.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){e.preventDefault();select();} });
+      box.appendChild(label);
+    });
+    $("backBtn").style.visibility = current===0?"hidden":"visible";
+    $("nextBtn").disabled = vaild();
+  }
+  function vaild(){
+    var a=answers[current], q=S()[current];
+    if(Array.isArray(a)) return a.length===0;
+    return a===null;
+  }
+  function goTo(i){ current=i; renderQuestion(); }
+
+  /* ---------------- compute ---------------- */
+  function valOf(i){
+    var q=S()[i], a=answers[i];
+    if(Array.isArray(a)){
+      if(a.length===0) return 0;
+      var mx=0;
+      a.forEach(function(idx){ if(q.opts[idx].v>mx) mx=q.opts[idx].v; });
+      return mx;
+    }
+    return q.opts[a].v;
+  }
+  function multiPct(i){
+    var v=valOf(i);
+    var map=[12,38,62,88];
+    if(Array.isArray(answers[i])) {
+      if(v===0) return map[0];
+      if(v<=1) return map[2];
+      if(v>=3) return map[3];
+      return map[2];
+    }
+    return map[v];
+  }
+  function compute(){
+    var total=0,max=6*3;
+    for(var i=0;i<6;i++) total+=valOf(i);
+    var pct=Math.round(total/max*100);
+    var score = pct>=70?"great":(pct>=45?"ok":(pct>=25?"mix":"poor"));
+    return {pct:pct,score:score};
+  }
+
+  /* Идеи — общий банк, на двух языках */
+  var IDEAS = {
+    learn:{en:[
+      ["Learn English for 20 minutes a day","Duolingo, Lingualeo or a series with English subtitles."],
+      ["Build a useful skill","Python, Excel, Figma, photo editing — 15–30 minutes daily."],
+      ["Read something interesting","A book or a good article instead of the feed — 20 min a day."]
+    ],ru:[
+      ["Учи английский 20 минут в день","Duolingo, Lingualeo или сериал на английском с субтитрами."],
+      ["Освой полезный навык","Python, Excel, Figma, фотошоп — по 15–30 минут ежедневно."],
+      ["Прочитай что-нибудь интересное","Книга или статья вместо ленты — 20 минут в день."]
+    ]},
+    active:{en:[
+      ["Walk 5,000–8,000 steps","Walk to a further bus stop, or take a walk after dinner."],
+      ["A 30-minute workout, no equipment needed","Push-ups, squats, plank — at home or outside."],
+      ["Try a new activity","Bike ride, badminton, pool, table tennis."]
+    ],ru:[
+      ["Пройди 5000–8000 шагов","Пешком до дальней остановки или прогулка после ужина."],
+      ["30-минутная тренировка без инвентаря","Отжимания, приседания, планка — дома или во дворе."],
+      ["Попробуй новую активность","Велопрогулка, бадминтон, бассейн, настольный теннис."]
+    ]},
+    create:{en:[
+      ["Keep a 3-5 minute journal","Write down a thought, a thank-you, or a plan for tomorrow."],
+      ["Make something with your hands","A drawing, a craft, music, cooking a new dish."],
+      ["Collect ideas in a notebook","Save thoughts — later they become projects."]
+    ],ru:[
+      ["Веди дневник 3–5 минут","Записывай мысль дня, благодарность или план на завтра."],
+      ["Создай что-то руками","Рисунок, поделка, музыка, приготовление нового блюда."],
+      ["Собирай идеи в заметки","Сохраняй мысли — потом они станут проектами."]
+    ]},
+    reset:{en:[
+      ["Have a phone-free hour","Phone in another room for an hour — see what becomes possible."],
+      ["Turn off notifications for half a day","Use «Do Not Disturb» — you don't need special apps."],
+      ["Hide or delete 2–3 time-eating apps","Scrolling will get much harder."],
+      ["Try 10 days without short videos","Swap the feed for any task from this list."]
+    ],ru:[
+      ["Устрой час без телефона","Телефон в другую комнату на час — посмотри, что станет возможным."],
+      ["Отключи уведомления на полдня","Используй «Не беспокоить» — специальные приложения не нужны."],
+      ["Спрячь или удали 2–3 приложения-времясъеда","Скроллить станет в разы сложнее."],
+      ["Попробуй 10 дней без коротких видео","Заменяй ленту на любую задачу из списка."]
+    ]}
+  };
+function draw(arr,n){ var x=shuffleAll(arr); return x.slice(0,n) }
+  function shuffleAll(arr){ for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;} return arr.slice() }
+  function draftIdeas(score){
+    var sportPool = IDEAS.active[lang].concat(IDEAS.reset[lang]);
+    var devPool = IDEAS.learn[lang].concat(IDEAS.create[lang], IDEAS.reset[lang]);
+
+    var q2 = answers[1], q5 = answers[4];
+    var picksSport = [];
+    var picksDev = [];
+    // вопрос 2 (множественный): чем заполняешь время
+    if(Array.isArray(q2)){
+      if(q2.indexOf(0)>-1 && score==="great") devPool=IDEAS.learn[lang].slice(); // увлекается скроллом — пусть хотя бы из смототит развитие
+      if(q2.indexOf(0)>-1 || q2.indexOf(1)>-1) picksSport.push(sportPool.shift());
+      if(q2.indexOf(0)>-1 || q2.indexOf(1)>-1) picksDev.push(devPool.shift());
+    }
+    // вопрос 5 (хобби)
+    if(q5===0 || q5===1){
+      picksDev.push(IDEAS.learn[lang].concat(IDEAS.create[lang])[0] || devPool[0]);
+      if(!picksSport.length) picksSport.push(sportPool[0]);
+    } else if(q5>=2 && (score==="great"||score==="ok")){
+      picksDev.push(IDEAS.create[lang].concat(IDEAS.learn[lang])[0] || devPool[0]);
+    }
+
+    // добиваем пулами
+    while(picksSport.length<3){ if(!sportPool.length) break; picksSport.push(sportPool.shift()); }
+    while(picksDev.length<3){ if(!devPool.length) break; picksDev.push(devPool.shift()); }
+    // подстраховка
+    if(picksSport.length<3) picksSport=picksSport.concat(IDEAS.active[lang].concat(IDEAS.reset[lang]));
+    if(picksDev.length<3) picksDev=picksDev.concat(IDEAS.learn[lang].concat(IDEAS.create[lang]));
+
+    return {sport:draw(picksSport,3), dev:draw(picksDev,3)};
+  }
+
+  /* ---------------- result ---------------- */
+  function renderResult(){
+    var l=t();
+    var c=compute();
+    var barsRows=S().map(function(q,i){
+      var p = multiPct(i);
+      return '<div class="bar-row"><div class="bar-top"><b>'+q.t+'</b><span>'+p+'% '+l.appx+'</span></div><div class="bar"><i style="width:0%" data-w="'+p+'"></i></div></div>';
+    }).join("");
+    var ideas=draftIdeas(c.score);
+    var res=l.RESULTS[c.score];
+    var badgeCls = c.score==="mix"?"mix":(c.score==="great"||c.score==="ok"?"good":"warn");
+    function colHtml(title,sub,arr){
+      return '<div class="rec-col"><h4>'+title+'</h4><p>'+sub+'</p><ul>'+arr.map(function(x){return '<li><b>'+x[0]+'</b> — '+x[1]+'</li>'}).join("")+'</ul></div>';
+    }
+    var recHtml = '<div class="rec-grid">'+
+      colHtml(l.recSport, l.recSportSub, ideas.sport)+
+      colHtml(l.recDev, l.recDevSub, ideas.dev)+
+    '</div>';
+    var tipHtml=l.tipList.map(function(x){return '<li><b>'+x[0]+':</b> '+x[1]+'</li>'}).join("");
+    var ringOuter=376.8;
+    $("resultCard").innerHTML =
+      '<div class="result-hero">'+
+        '<div class="ring"><svg viewBox="0 0 130 130" aria-hidden="true">'+
+          '<circle class="bg" cx="65" cy="65" r="60"></circle>'+
+          '<circle class="fg" cx="65" cy="65" r="60" style="stroke:'+(c.score==="mix"?"#c98a1b":(c.score==="great"||c.score==="ok"?"#2f7d5a":"#c2503e"))+';stroke-dashoffset:'+ringOuter+'"></circle></svg>'+
+          '<div class="num"><span><span id="ringNum">0</span>%<small>'+l.resultPhLabel+'</small></span></div></div>'+
+        '<div><div style="margin-bottom:8px"><span class="badge '+badgeCls+'">'+res.b+'</span></div>'+
+        '<h2 class="result-title">'+res.title+'</h2>'+
+        '<p class="result-sub">'+res.sub+'</p></div>'+
+      '</div>'+
+      '<h3 class="sect">'+l.sectionBreakdown+'</h3><p class="note">'+l.sectionBreakdownNote+'</p>'+
+      barsRows+
+      '<h3 class="sect">'+l.sectionIdeas+'</h3><p class="note">'+l.sectionIdeasNote+'</p>'+
+      recHtml+
+      '<div class="panel warn"><h3><span class="badge warn">'+l.restartTip+'</span> '+l.panelTip+'</h3><ul>'+tipHtml+'</ul></div>';
+
+    var statsHtml =
+      '<div class="why">'+
+        '<h3 class="sect">'+l.whyTitle+'</h3>'+
+        '<div class="why-cards">'+
+          '<div class="why-card"><b>'+l.why1t+'</b><span>'+l.why1d+'</span></div>'+
+          '<div class="why-card"><b>'+l.why2t+'</b><span>'+l.why2d+'</span></div>'+
+          '<div class="why-card"><b>'+l.why3t+'</b><span>'+l.why3d+'</span></div>'+
+          '<div class="why-card"><b>'+l.why4t+'</b><span>'+l.why4d+'</span></div>'+
+        '</div>'+
+        '<h3 class="sect">'+l.whyStat+'</h3>'+
+        '<div class="stat-row"><div class="stat-top"><b>'+l.st1t+'</b><span>'+l.st1v+'</span></div><div class="bar"><i style="width:70%"></i></div></div>'+
+        '<div class="stat-row"><div class="stat-top"><b>'+l.st2t+'</b><span>'+l.st2v+'</span></div><div class="bar"><i style="width:47%"></i></div></div>'+
+        '<div class="stat-row"><div class="stat-top"><b>'+l.st3t+'</b><span>'+l.st3v+'</span></div><div class="bar"><i style="width:40%"></i></div></div>'+
+        '<p class="stat-src">'+l.stSrc+'</p>'+
+      '</div>';
+    $("statsWrap").style.display = "block";
+    $("statsBody").innerHTML = statsHtml;
+
+    requestAnimationFrame(function(){ setTimeout(function(){
+      var num=$("ringNum"); var target=c.pct; var t0=null, dur=900;
+      function tick(ts){ if(t0==null)t0=ts; var k=Math.min(1,(ts-t0)/dur); var e=1-Math.pow(1-k,3);
+        num.textContent=Math.round(target*e);
+        var fg=$("resultCard").querySelector(".fg");
+        fg.style.strokeDashoffset=(ringOuter - ringOuter*target/100*e).toFixed(1);
+        if(k<1) requestAnimationFrame(tick); }
+      requestAnimationFrame(tick);
+    },150); });
+    requestAnimationFrame(function(){ setTimeout(function(){
+      $("resultCard").querySelectorAll(".bar i").forEach(function(el){ el.style.width=el.getAttribute("data-w")+"%" });
+    },200); });
+  }
+
+  /* ---------------- listeners ---------------- */
+  $("startBtn").addEventListener("click",function(){ show("quiz"); goTo(0); });
+  $("nextBtn").addEventListener("click",function(){
+    if(current<6-1){ goTo(current+1); } else { show("result"); renderResult(); }
+  });
+  $("backBtn").addEventListener("click",function(){ if(current>0) goTo(current-1); });
+  $("restartBtn").addEventListener("click",function(){ answers=new Array(6).fill(null); current=0; show("welcome"); });
+  $("langEn").addEventListener("click",function(){ setLang("en"); });
+  $("langRu").addEventListener("click",function(){ setLang("ru"); });
+
+  applyStatic();
+  show("welcome");
+})();
+</script>
+</body>
+</html>
