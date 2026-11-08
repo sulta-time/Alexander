@@ -292,6 +292,9 @@
       secStats:"You should know this",
       counterTitle:"Tests completed on this device", counterSub:"Anonymous result, stored locally on this device only",
       statTitle:"Anonymous statistics of those who took the test",
+      statGlobalTitle:"Global anonymous statistics", statGlobalSub:"All visitors who shared their result",
+      sendBtn:"Send my result anonymously", sendBtnDone:"Result sent, thank you!",
+      statTotal:"Total shared results", statPctAvg:"Average usefulness", statPctWasted:"Share who waste time", statPctMixed:"Share with mixed result", statPctGood:"Share with good result",
       statAttempts:"Total completions", statAvgScore:"Average usefulness score", statWasted:"Share who waste time", statMixed:"Share with a mixed result", statTop:"Share with good result",
       recSport:"🏃 Sport & movement", recSportSub:"Move a little every day — it gives you energy back",
       recDev:"📚 Self-development", recDevSub:"Learn and grow even 15–20 minutes at a time",
@@ -443,6 +446,9 @@
       secStats:"Это стоит знать",
       counterTitle:"Прохождений теста на этом устройстве", counterSub:"Анонимно, хранится локально только на этом устройстве",
       statTitle:"Анонимная статистика прошедших тест",
+      statGlobalTitle:"Общая анонимная статистика", statGlobalSub:"Все посетители, кто отправил свой результат",
+      sendBtn:"Отправить мой результат анонимно", sendBtnDone:"Результат отправлен, спасибо!",
+      statTotal:"Всего отправленных результатов", statPctAvg:"Средняя полезность", statPctWasted:"Доля тех, кто теряет время", statPctMixed:"Доля со смешанным результатом", statPctGood:"Доля с хорошим результатом",
       statAttempts:"Всего прохождений", statAvgScore:"Средний балл пользы", statWasted:"Доля тех, кто теряет время", statMixed:"Доля со смешанным результатом", statTop:"Доля с хорошим результатом",
       recSport:"🏃 Спорт и движение", recSportSub:"Двигайся немного каждый день — это возвращает энергию",
       recDev:"📚 Саморазвитие", recDevSub:"Учись и развивайся хоть по 15–20 минут",
@@ -571,6 +577,9 @@
   resetAnswers();
   var current = 0;
   var SHARE_LINK = "https://sulta-time.github.io/Alexander/";
+  var SB_URL = "https://cnqldhppcxlsvhtzbygu.supabase.co";
+  var SB_KEY = "sb_publishable_83kaW7PWGFuHjpfkgSoG5A_eZKL9MRd";
+  var SB_TABLE = "quiz_results";
   var $ = function(id){ return document.getElementById(id) };
   var screens={welcome:$("s-welcome"),quiz:$("s-quiz"),result:$("s-result")};
   function t(){ return STR[lang] }
@@ -867,6 +876,39 @@ function draw(arr,n){ var x=shuffleAll(arr); return x.slice(0,n) }
     return s;
   }
 
+  /* ---------------- Supabase shared stats (anonymous) ---------------- */
+  function sbSendResult(c){
+    return fetch(SB_URL+"/rest/v1/"+SB_TABLE, {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "apikey":SB_KEY,
+        "Authorization":"Bearer "+SB_KEY,
+        "Prefer":"return=representation"
+      },
+      body: JSON.stringify({ score_pct: c.pct, result_type: c.score })
+    }).then(function(r){ return r.ok; }).catch(function(){ return false; });
+  }
+  function sbFetchStats(){
+    return fetch(SB_URL+"/rest/v1/"+SB_TABLE+"?select=score_pct,result_type", {
+      headers:{
+        "apikey":SB_KEY,
+        "Authorization":"Bearer "+SB_KEY
+      }
+    }).then(function(r){ if(!r.ok) throw 0; return r.json(); })
+      .then(function(rows){
+        var total = rows.length;
+        var sum=0, wasted=0, mixed=0, good=0;
+        rows.forEach(function(r){
+          sum += (r.score_pct||0);
+          if(r.result_type==="great"||r.result_type==="ok") good++;
+          else if(r.result_type==="mix") mixed++;
+          else wasted++;
+        });
+        return {total: total, avg: total?Math.round(sum/total):0, wasted: total?Math.round(wasted/total*100):0, mixed: total?Math.round(mixed/total*100):0, good: total?Math.round(good/total*100):0};
+      }).catch(function(){ return null; });
+  }
+
   /* ---------------- result ---------------- */
   function renderResult(){
     var l=t();
@@ -952,7 +994,14 @@ function draw(arr,n){ var x=shuffleAll(arr); return x.slice(0,n) }
       hobbyHtml+
       extraTips+
       '<div class="panel warn"><h3><span class="badge warn">'+l.restartTip+'</span> '+l.panelTip+'</h3><ul>'+tipHtml+'</ul></div>'+
-      localStatsHtml;
+      localStatsHtml+
+      '<div class="panel good" id="globalStatsPanel" style="margin-top:14px">'+
+        '<h4>'+l.statGlobalTitle+'</h4>'+
+        '<p class="note" id="globalStatsSub">'+l.statGlobalSub+'</p>'+
+        '<div id="globalStatsBody">'+l.statTotal+': <span id="sbTotal">…</span></div>'+
+        '<button class="btn" id="sbSendBtn" type="button" style="margin-top:12px">'+l.sendBtn+'</button>'+
+        '<span id="sbSendMsg" style="display:none;margin-left:10px;color:var(--accent-dark);font-weight:700"></span>'+
+      '</div>';
 
     var statsHtml =
       '<div class="why">'+
@@ -971,6 +1020,37 @@ function draw(arr,n){ var x=shuffleAll(arr); return x.slice(0,n) }
       '</div>';
     $("statsWrap").style.display = "block";
     $("statsBody").innerHTML = statsHtml;
+
+    // Общая статистика (Supabase)
+    sbFetchStats().then(function(g){
+      if(g){
+        var b = $("globalStatsBody");
+        if(b){
+          b.innerHTML =
+            '<div class="stat-row"><div class="stat-top"><b>'+l.statTotal+'</b><span>'+g.total+'</span></div></div>'+
+            '<div class="stat-row"><div class="stat-top"><b>'+l.statPctAvg+'</b><span>'+g.avg+'%</span></div></div>'+
+            '<div class="stat-row"><div class="stat-top"><b>'+l.statPctWasted+'</b><span>'+g.wasted+'%</span></div></div>'+
+            '<div class="stat-row"><div class="stat-top"><b>'+l.statPctMixed+'</b><span>'+g.mixed+'%</span></div></div>'+
+            '<div class="stat-row"><div class="stat-top"><b>'+l.statPctGood+'</b><span>'+g.good+'%</span></div></div>';
+        }
+      } else {
+        var p = $("globalStatsPanel");
+        if(p) p.style.display = "none";
+      }
+    });
+    var sbBtn = $("sbSendBtn");
+    if(sbBtn){
+      sbBtn.onclick = null;
+      sbBtn.addEventListener("click", function(){
+        sbBtn.disabled = true;
+        sbSendResult(c).then(function(ok){
+          var msg = $("sbSendMsg");
+          if(msg){ msg.style.display="inline"; msg.textContent = ok ? (" "+l.sendBtnDone) : (" ✗"); }
+          if(ok){ var btn=$("sbSendBtn"); if(btn) btn.style.display="none"; }
+          else { sbBtn.disabled=false; }
+        });
+      });
+    }
 
     requestAnimationFrame(function(){ setTimeout(function(){
       var num=$("ringNum"); var target=c.pct; var t0=null, dur=900;
